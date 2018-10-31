@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'wind.ui'
+# Form implementation generated from reading ui file 'qt_design_wind.ui'
 #
-# Created by: PyQt5 UI code generator 5.9.2
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -11,14 +11,15 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(767, 554)
+        MainWindow.resize(730, 528)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.widget = QtWidgets.QWidget(self.centralwidget)
-        self.widget.setGeometry(QtCore.QRect(220, 0, 531, 511))
-        self.widget.setObjectName("widget")
-        self.verticalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 171, 481))
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.splitter = QtWidgets.QSplitter(self.centralwidget)
+        self.splitter.setOrientation(QtCore.Qt.Horizontal)
+        self.splitter.setObjectName("splitter")
+        self.verticalLayoutWidget = QtWidgets.QWidget(self.splitter)
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -36,9 +37,14 @@ class Ui_MainWindow(object):
         self.pushButton = QtWidgets.QPushButton(self.verticalLayoutWidget)
         self.pushButton.setObjectName("pushButton")
         self.verticalLayout.addWidget(self.pushButton)
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem)
+        self.matrix_widget = MatrixWidget(self.splitter)
+        self.matrix_widget.setObjectName("matrix_widget")
+        self.horizontalLayout.addWidget(self.splitter)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 767, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 730, 18))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -53,3 +59,4 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton.setText(_translate("MainWindow", "PushButton"))
 
+from matrix_output_widget import MatrixWidget

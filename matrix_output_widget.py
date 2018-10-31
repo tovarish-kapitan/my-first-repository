@@ -8,13 +8,13 @@ import complex_matrix_generator
 
 class MatrixWidget(pg.GraphicsLayoutWidget):
 
-    def __init__(self):
+    def __init__(self, parent=None):
+        self.frames = None
         self.img = pg.ImageItem()
         self.i = None
         self.fps = None
         self.updateTime = None
-        self.frames = []
-        super().__init__()
+        super().__init__(parent)
         self.initUI()
 
     def initUI(self):
@@ -24,13 +24,17 @@ class MatrixWidget(pg.GraphicsLayoutWidget):
         view.setRange(QRectF(0, 0, 600, 600))
 
     def updateData(self): 
-        (self.img).setImage(abs(self.frames[:, :, (self.i) % 61]))# циклично выводим модуль iй матрицы
+        self.set_data(self.frames[:,:,self.i%61])
         QTimer.singleShot(1, self.updateData)
         now = ptime.time()
         self.fps = 1 / (now - self.updateTime)
         print("fps =", self.fps)
         self.updateTime = now
         self.i = self.i + 1
+
+    def set_data(self, in_array_data):
+        (self.img).setImage(abs(in_array_data))
+
 
     def complexMatrixOut(self):
         self.frames = complex_matrix_generator.OurMatrix(600,600,62,50).Data
@@ -42,6 +46,16 @@ class MatrixWidget(pg.GraphicsLayoutWidget):
 
 if __name__ == '__main__':
     import sys
+
+
+    ###################################
+    sys._excepthook = sys.excepthook
+    def exception_hook(exctype, value, traceback):
+        sys._excepthook(exctype, value, traceback)
+        sys.exit(1)
+    sys.excepthook = exception_hook
+    ######################################
+
     app = QtGui.QApplication([])
     mw = MatrixWidget()
     mw.show()

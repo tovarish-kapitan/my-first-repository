@@ -31,6 +31,16 @@ class Window(QWidget):
         self.setWindowTitle('QSplitter')
                 
 if __name__ == '__main__':
+
+    ###################################
+    sys._excepthook = sys.excepthook
+    def exception_hook(exctype, value, traceback):
+        sys._excepthook(exctype, value, traceback)
+        sys.exit(1)
+    sys.excepthook = exception_hook
+    ######################################
+
+
     app = QApplication(sys.argv)
     matrix = complex_matrix_output.MatrixWidget()
     mw = Window(matrix)
