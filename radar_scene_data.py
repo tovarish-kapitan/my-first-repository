@@ -96,7 +96,7 @@ class RadarSceneData:
                    
 if __name__ == "__main__":
     import sys
-    C = RadarSceneData("greece.kml") #наш рабочий пример
+    C = RadarSceneData("greece2.kml") #наш рабочий пример
     C.traject_approx(0.1)
     radar_positions = C.xradar_positions + C.lradar_positions
     radar_names = C.xradar_names + C.lradar_names
@@ -106,20 +106,22 @@ if __name__ == "__main__":
     m = len(C.target_names)
     i = 0
     while (i < n):
+        print(radar_names[i])
         fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
+        ax = fig.add_subplot(111)
         A = misc.TopoCoordTransformer(radar_positions[i][0], radar_positions[i][1], radar_positions[i][2])
         j = 0
         while (j < m):
             #N = A.lonlatalt_to_xyz_geocent(C.long_slice_list[0], C.lat_slice_list[0], C.alt_slice_list[0])
             #M = A.xyz_geocent_to_xyz_topo(N[0], N[1], N[2])
             K = A.lonlatalt_to_xyz_topo(C.long_slice_list[j], C.lat_slice_list[j], C.alt_slice_list[j])
-            ax.scatter(K[0], K[1], K[2], c='b', marker='o')
-            ax.scatter(radar_positions[i][0], radar_positions[i][1], radar_positions[i][2], c='r', marker='s')
+            ax.scatter(C.long_slice_list[j], C.lat_slice_list[j], c='b', marker='o')
+            ax.scatter(radar_positions[i][0], radar_positions[i][1], c='r', marker='s')
             ax.set_xlabel('East')
             ax.set_ylabel('North')
-            ax.set_zlabel('Z')
+            # ax.set_zlabel('Z')
             j = j + 1
+        ax.set_aspect(1.0)
         plt.show()    
         i = i + 1
     
