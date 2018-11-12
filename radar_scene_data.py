@@ -1,6 +1,8 @@
+import sys
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy import interpolate
 from mpl_toolkits.mplot3d import Axes3D
 from bs4 import BeautifulSoup
 import misc
@@ -27,11 +29,9 @@ class RadarSceneData:
         else:
             while cake != None:
                 name = cake.find("name").get_text()
-               
                 coord = cake.find("coordinates").get_text()
                 coord = coord[5:-5]  #обрезаем знаки \t \n по краям и пробел в конце
                 c_list = coord.split(' ')
-                
                 i = 0
                 while i < len(c_list):
                     c_list[i] = c_list[i].split(',')
@@ -40,7 +40,6 @@ class RadarSceneData:
                         c_list[i][j] = float(c_list[i][j]) #все числовые строки переводим во float
                         j = j + 1
                     i = i + 1
-                    
                 if name[0] == 'X':
                     long = cake.find("longitude").get_text()
                     lat = cake.find("latitude").get_text()
@@ -56,11 +55,11 @@ class RadarSceneData:
                 else:
                     self.target_names.append(name)
                     self.target_trajectories.append(c_list)
-
                 my_kml.placemark.decompose()
                 cake = my_kml.find("placemark")
-    def traject_approx(self, dx):  #разбивает отрезки между точками траектории с шагом не более чем dx
-#и готовит координатные срезы, чтобы потом их можно было скормить функциям из TopoCoordTransformer
+
+    def traject_approx(self, dx=0.1):  #разбивает отрезки между точками траектории с шагом не более чем dx
+        #и готовит координатные срезы, чтобы потом их можно было скормить функциям из TopoCoordTransformer
         n = len(self.target_names)
         i = 0
         while (i < n):
@@ -93,35 +92,107 @@ class RadarSceneData:
             self.lat_slice_list.append(lat_slice)
             self.alt_slice_list.append(alt_slice)
             i = i + 1           
-                   
-if __name__ == "__main__":
-    import sys
-    C = RadarSceneData("greece2.kml") #наш рабочий пример
-    C.traject_approx(0.1)
-    radar_positions = C.xradar_positions + C.lradar_positions
-    radar_names = C.xradar_names + C.lradar_names
-    #print(radar_names)
-    n = len(radar_positions)
-    #print(n)
-    m = len(C.target_names)
-    i = 0
-    while (i < n):
-        print(radar_names[i])
+    def show_trajectories(self, dx):
+        self.traject_approx(dx)
+        radar_positions = self.xradar_positions + self.lradar_positions
+        radar_names = self.xradar_names + self.lradar_names
+        n = len(radar_names)
+        m = len(self.target_names)
+        i = 0
+        while (i < n):
+            #print(radar_names[i])
+            fig = plt.figure()
+            ax = fig.add_subplot(111, projection='3d')
+            tct = misc.TopoCoordTransformer(radar_positions[i][0], radar_positions[i][1], radar_positions[i][2])
+            j = 0
+            while (j < m):
+                # N = A.lonlatalt_to_xyz_geocent(C.long_slice_list[0], C.lat_slice_list[0], C.alt_slice_list[0])
+                # M = A.xyz_geocent_to_xyz_topo(N[0], N[1], N[2])
+                top = tct.lonlatalt_to_xyz_topo(self.long_slice_list[j], self.lat_slice_list[j], self.alt_slice_list[j])
+                ax.scatter(top[0], top[1], top[2], c='b', marker='o')
+                ax.scatter(radar_positions[i][0], radar_positions[i][1],radar_positions[i][2],  c='r', marker='s')
+                ax.set_xlabel('East')
+                ax.set_ylabel('North')
+                ax.set_zlabel('Z')
+                j = j + 1
+            #ax.set_aspect(1.0)
+            plt.show()
+            i = i + 1
+
+
+class TargetMotion:
+    def __init__(self, target_velocity, ctrl_points):
+        self.v = target_velocity
+        self.control_points = ctrl_points
+        self.n = len(self.control_points)
+        self.long_slice = []
+        self.lat_slice = []
+        self.alt_slice = []
+        self.xyz_geo = []
+        self.l_slice = []
+
+    def subdividing(self, dx): # добавляем точек, чтоб самолет не чиркал землю, как и в RadarSceneData
+        for i in range(self.n - 1):
+            delta_long = self.control_points[i + 1][0] - self.control_points[i][0]
+            delta_lat = self.control_points[i + 1][1] - self.control_points[i][1]
+            delta_alt = self.control_points[i + 1][2] - self.control_points[i][2]
+            delta = (abs(delta_long)**2 + abs(delta_lat)**2)**0.5
+            k = math.floor(delta / dx)
+            d_long = delta_long / k
+            d_lat = delta_lat / k
+            d_alt = delta_alt / k
+            for j in range(k):
+                self.long_slice.append(self.control_points[i][0] + j * d_long)
+                self.lat_slice.append(self.control_points[i][1] + j * d_lat)
+                self.alt_slice.append(self.control_points[i][2] + j * d_alt)
+
+    def parametrization(self):  # каждой точке траектории сопоставляем значение l, пройденный путь,
+        # чтобы потом использовать одномерную интерполяцию для каждой отдельной координаты
+        tct = misc.TopoCoordTransformer(0, 0, 0)
+        self.xyz_geo = tct.lonlatalt_to_xyz_geocent(self.long_slice, self.lat_slice, self.alt_slice)
+        # переводим в xyz_geocent, чтобы пифагорить
+        n = len(self.xyz_geo[0])
+        l = 0
+        for i in range(n):
+            self.l_slice.append(l)
+            if i < n - 1:
+                delta_l = ((self.xyz_geo[0][i + 1] - self.xyz_geo[0][i]) ** 2 +
+                           (self.xyz_geo[1][i + 1] - self.xyz_geo[1][i]) ** 2 +
+                           (self.xyz_geo[2][i + 1] - self.xyz_geo[2][i]) ** 2) ** 0.5
+                l = l + delta_l
+
+    def showing(self, t):
+        x_l = interpolate.interp1d(self.l_slice, self.xyz_geo[0])
+        y_l = interpolate.interp1d(self.l_slice, self.xyz_geo[1])
+        z_l = interpolate.interp1d(self.l_slice, self.xyz_geo[2])
+        l_new = np.arange(0, (self.l_slice[-1]//1000)*1000, 1000)  # округлим l max до км
+        x_new = x_l(l_new)
+        y_new = y_l(l_new)
+        z_new = z_l(l_new)
         fig = plt.figure()
-        ax = fig.add_subplot(111)
-        A = misc.TopoCoordTransformer(radar_positions[i][0], radar_positions[i][1], radar_positions[i][2])
-        j = 0
-        while (j < m):
-            #N = A.lonlatalt_to_xyz_geocent(C.long_slice_list[0], C.lat_slice_list[0], C.alt_slice_list[0])
-            #M = A.xyz_geocent_to_xyz_topo(N[0], N[1], N[2])
-            K = A.lonlatalt_to_xyz_topo(C.long_slice_list[j], C.lat_slice_list[j], C.alt_slice_list[j])
-            ax.scatter(C.long_slice_list[j], C.lat_slice_list[j], c='b', marker='o')
-            ax.scatter(radar_positions[i][0], radar_positions[i][1], c='r', marker='s')
-            ax.set_xlabel('East')
-            ax.set_ylabel('North')
-            # ax.set_zlabel('Z')
-            j = j + 1
-        ax.set_aspect(1.0)
-        plt.show()    
-        i = i + 1
-    
+        ax = fig.add_subplot(111, projection='3d')
+        ax.scatter(x_new, y_new, z_new, c='b', marker='o')
+        ax.scatter(x_l(self.v * t), y_l(self.v * t), z_l(self.v * t), c='r', marker='s')
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('Z')
+        plt.show()
+
+    def __call__(self, t):
+        l = self.v * t
+        if l < self.l_slice[-1]:
+            x_l = interpolate.interp1d(self.l_slice, self.xyz_geo[0])
+            y_l = interpolate.interp1d(self.l_slice, self.xyz_geo[1])
+            z_l = interpolate.interp1d(self.l_slice, self.xyz_geo[2])
+            return (float(x_l(l)), float(y_l(l)), float(z_l(l))), (x_l(l+self.v) - x_l(l), y_l(l+self.v) - y_l(l), z_l(l+self.v) - z_l(l))
+            #  возвращаем тупли xyz_geocent(t), v_geocent(t)
+
+
+if __name__ == "__main__":
+    rsd = RadarSceneData("greece2.kml") #наш рабочий пример
+    #rsd.show_trajectories(0.05)
+    tm = TargetMotion(250, rsd.target_trajectories[0])
+    tm.subdividing(0.1)
+    tm.parametrization()
+    print(tm(200))
+    tm.showing(200)
