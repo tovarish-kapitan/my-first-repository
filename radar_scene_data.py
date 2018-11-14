@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 from scipy import interpolate
 from mpl_toolkits.mplot3d import Axes3D
 from bs4 import BeautifulSoup
+from mayavi.mlab import *
+
 import misc
 
 class RadarSceneData:
@@ -130,6 +132,9 @@ class TargetMotion:
         self.alt_slice = []
         self.xyz_geo = []
         self.l_slice = []
+        self.x_l = None
+        self.y_l = None
+        self.z_l = None
 
     def subdividing(self, dx): # добавляем точек, чтоб самолет не чиркал землю, как и в RadarSceneData
         for i in range(self.n - 1):
@@ -160,31 +165,36 @@ class TargetMotion:
                            (self.xyz_geo[1][i + 1] - self.xyz_geo[1][i]) ** 2 +
                            (self.xyz_geo[2][i + 1] - self.xyz_geo[2][i]) ** 2) ** 0.5
                 l = l + delta_l
+        self.x_l = interpolate.interp1d(self.l_slice, self.xyz_geo[0])
+        self.y_l = interpolate.interp1d(self.l_slice, self.xyz_geo[1])
+        self.z_l = interpolate.interp1d(self.l_slice, self.xyz_geo[2])
 
-    def showing(self, t):
-        x_l = interpolate.interp1d(self.l_slice, self.xyz_geo[0])
-        y_l = interpolate.interp1d(self.l_slice, self.xyz_geo[1])
-        z_l = interpolate.interp1d(self.l_slice, self.xyz_geo[2])
+    def showing_earth(self):
+        dphi, dtheta = np.pi / 1000.0, np.pi / 1000.0
+        [phi, theta] = np.mgrid[0:np.pi:dphi, 0:2 * np.pi:dtheta]
+        a = misc.EARTH_SEMIMAJOR
+        b = misc.EARTH_SEMIMINOR
+        x = a * np.cos(phi) * np.cos(theta)
+        y = a * np.cos(theta) * np.sin(phi)
+        z = b * np.sin(theta)
+        s = mesh(x, y, z)
+        return s
+
+    def showing_traject(self):
         l_new = np.arange(0, (self.l_slice[-1]//1000)*1000, 1000)  # округлим l max до км
-        x_new = x_l(l_new)
-        y_new = y_l(l_new)
-        z_new = z_l(l_new)
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
-        ax.scatter(x_new, y_new, z_new, c='b', marker='o')
-        ax.scatter(x_l(self.v * t), y_l(self.v * t), z_l(self.v * t), c='r', marker='s')
-        ax.set_xlabel('X')
-        ax.set_ylabel('Y')
-        ax.set_zlabel('Z')
-        plt.show()
+        x_new = self.x_l(l_new)
+        y_new = self.y_l(l_new)
+        z_new = self.z_l(l_new)
+
+        return points3d(x_new, y_new, z_new, colormap="copper", scale_factor=10000)
 
     def __call__(self, t):
         l = self.v * t
         if l < self.l_slice[-1]:
-            x_l = interpolate.interp1d(self.l_slice, self.xyz_geo[0])
-            y_l = interpolate.interp1d(self.l_slice, self.xyz_geo[1])
-            z_l = interpolate.interp1d(self.l_slice, self.xyz_geo[2])
-            return (float(x_l(l)), float(y_l(l)), float(z_l(l))), (x_l(l+self.v) - x_l(l), y_l(l+self.v) - y_l(l), z_l(l+self.v) - z_l(l))
+            return (float(self.x_l(l)), float(self.y_l(l)), float(self.z_l(l))), \
+                   (self.x_l(l+self.v) - self.x_l(l),
+                    self.y_l(l+self.v) - self.y_l(l),
+                    self.z_l(l+self.v) - self.z_l(l))
             #  возвращаем тупли xyz_geocent(t), v_geocent(t)
 
 
@@ -195,4 +205,7 @@ if __name__ == "__main__":
     tm.subdividing(0.1)
     tm.parametrization()
     print(tm(200))
-    tm.showing(200)
+    tm.showing_earth()
+    tm.showing_traject()
+    show()
+    #tm.showing(200)
