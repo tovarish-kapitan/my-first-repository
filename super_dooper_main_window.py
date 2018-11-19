@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication
 
+
 import qt_design_wind
 import matrix_output_widget
 import sys
@@ -29,7 +30,7 @@ if __name__ == '__main__':
     mw = matrix_output_widget.MatrixWidget()
     sdmw.show()
 
-    sdmw.matrix_widget.complexMatrixOut()
+    sdmw.matrix_widget.complex_matrix_out(2,3,50,10)
 
     # mw.show()
     # mw.complexMatrixOut()

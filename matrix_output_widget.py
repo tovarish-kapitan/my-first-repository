@@ -24,7 +24,7 @@ class MatrixWidget(pg.GraphicsLayoutWidget):
         view.setRange(QRectF(0, 0, 600, 600))
 
     def updateData(self): 
-        self.set_data(self.frames[:,:,self.i%61])
+        self.set_data(self.frames[:,:,self.i%62])
         QTimer.singleShot(1, self.updateData)
         now = ptime.time()
         self.fps = 1 / (now - self.updateTime)
@@ -36,8 +36,8 @@ class MatrixWidget(pg.GraphicsLayoutWidget):
         (self.img).setImage(abs(in_array_data))
 
 
-    def complexMatrixOut(self):
-        self.frames = complex_matrix_generator.OurMatrix(600,600,62,50).Data
+    def complex_matrix_out(self, nx, ny, sigma, intensity):
+        self.frames = complex_matrix_generator.OurMatrix(600,600,nx,ny,sigma,intensity,63).Data
         self.updateTime = ptime.time()
         self.i = 0
         self.fps = 0
@@ -59,7 +59,7 @@ if __name__ == '__main__':
     app = QtGui.QApplication([])
     mw = MatrixWidget()
     mw.show()
-    mw.complexMatrixOut()
+    mw.complex_matrix_out()
        
     if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
         QtGui.QApplication.instance().exec_()

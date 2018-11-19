@@ -2,31 +2,26 @@ import numpy as np
 import math
 
 class OurMatrix:
-    def __init__(self, nx, ny, frames, sigma):
-        self.Data = np.ndarray(shape=(nx, ny, frames), dtype = complex)#массив комплексных матриц
-        t = 0
+    def __init__(self, x_dim, y_dim, nx, ny, sigma, intensity, frames):
+        self.Data = np.ndarray(shape=(x_dim, y_dim, frames,), dtype = complex)#массив комплексных матриц
+        for t in range(frames):
+            x_max = x_dim // 2 + math.ceil(x_dim // 3 * np.sin(nx * 0.1 * t))  #координаты двигающейся точки
+            y_max = y_dim // 2 + math.ceil(y_dim // 3 * np.cos(ny * 0.1 * t))  #фигуры Лиссажу
 
-        while t < frames:
-            x_max = 300 + math.ceil(200 * np.sin(0.1 * t))  #координаты двигающейся точки
-            y_max = 300 + math.ceil(200 * np.cos(0.2 * t + 0.5 * np.pi))  #фигуры Лиссажу
-
-            impletion = np.ndarray(shape=(nx, ny), dtype = complex)  #формируем заполнение
-            impletion[:, :].real = 2 * np.random.rand(nx, ny) - 1
-            impletion[:, :].imag = 2 * np.random.rand(nx, ny) - 1
+            impletion = np.ndarray(shape=(x_dim, y_dim), dtype = complex)  #формируем заполнение
+            impletion[:, :].real = 2 * np.random.rand(x_dim, y_dim) - 1
+            impletion[:, :].imag = 2 * np.random.rand(x_dim, y_dim) - 1
         
-            n = 0
-            while n < nx:
-                self.Data[n, :, t] = (np.exp(-((n - x_max)**2) / sigma)) * impletion[n, :]  #модулируем заполнение по столбцам,
-                n = n + 1
-            k = 0    
-            while k < ny:
-                self.Data[:, k, t] = 10*(np.exp(-((k - y_max)**2) / sigma)) * self.Data[:, k, t]  #а затем результат модулируем по строкам
-                k = k + 1
+            for n in range(x_dim):
+                self.Data[n, :, t] = (np.exp( - ((n - x_max) ** 2) / sigma)) * impletion[n, :]  #модулируем заполнение по столбцам,
+            for k in range(y_dim):
+                self.Data[:, k, t] = intensity * (np.exp(-((k - y_max)**2) / sigma)) * self.Data[:, k, t]  #а затем результат модулируем по строкам
 
             self.Data[:, :, t] = self.Data[:, :, t] + impletion[:, :]
             
             print(t, "st frame generated")
-            t = t + 1
 
 
-    
+if __name__ == "__main__":
+    om = OurMatrix(600,600,1,1,50,10, 63)
+
