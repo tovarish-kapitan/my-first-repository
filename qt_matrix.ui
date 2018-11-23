@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>662</width>
-    <height>456</height>
+    <width>658</width>
+    <height>480</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,9 +18,9 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>10</y>
-      <width>641</width>
-      <height>401</height>
+      <y>-3</y>
+      <width>651</width>
+      <height>448</height>
      </rect>
     </property>
     <property name="orientation">
@@ -29,14 +29,47 @@
     <widget class="QWidget" name="verticalLayoutWidget">
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;nx&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;размеры матрицы&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="nxbox">
+       <widget class="QSpinBox" name="xdim_box">
+        <property name="minimum">
+         <number>100</number>
+        </property>
+        <property name="maximum">
+         <number>1000</number>
+        </property>
+        <property name="singleStep">
+         <number>100</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="ydim_box">
+        <property name="minimum">
+         <number>100</number>
+        </property>
+        <property name="maximum">
+         <number>1000</number>
+        </property>
+        <property name="singleStep">
+         <number>100</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;nx лиссажу&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="nx_box">
         <property name="minimum">
          <number>1</number>
         </property>
@@ -48,12 +81,12 @@
       <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;ny&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;ny лиссажу&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="nybox">
+       <widget class="QSpinBox" name="ny_box">
         <property name="minimum">
          <number>1</number>
         </property>
@@ -70,7 +103,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QSlider" name="sigmaslider">
+       <widget class="QSlider" name="sigma_slider">
         <property name="minimum">
          <number>10</number>
         </property>
@@ -90,9 +123,29 @@
        </widget>
       </item>
       <item>
-       <widget class="QSlider" name="intenseslider">
+       <widget class="QSlider" name="intense_slider">
         <property name="minimum">
          <number>1</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;frames&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSlider" name="frames_slider">
+        <property name="minimum">
+         <number>33</number>
+        </property>
+        <property name="maximum">
+         <number>628</number>
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -113,7 +166,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="runbtn">
+       <widget class="QPushButton" name="run_btn">
         <property name="text">
          <string>generate and show</string>
         </property>
@@ -142,7 +195,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>662</width>
+     <width>658</width>
      <height>22</height>
     </rect>
    </property>

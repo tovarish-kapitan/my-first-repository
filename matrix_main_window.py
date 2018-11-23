@@ -12,30 +12,45 @@ class MatrixMainWindow(QtWidgets.QMainWindow, qt_matrix.Ui_MainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
-        self.nx = 1
-        self.ny = 1
         self.sigma = 50
         self.intensity = 10
-        self.nxbox.valueChanged.connect(self.change_nx)
-        self.nybox.valueChanged.connect(self.change_ny)
-        self.sigmaslider.valueChanged.connect(self.change_sigma)
-        self.intenseslider.valueChanged.connect(self.change_intensity)
-        self.runbtn.clicked.connect(self.run_matrix)
+        self.nx = 1
+        self.ny = 1
+        self.frames = 50
+        self.xdim = 500
+        self.ydim = 500
+        self.nx_box.valueChanged.connect(self.change_nx)
+        self.ny_box.valueChanged.connect(self.change_ny)
+        self.frames_slider.valueChanged.connect(self.set_frames)
+        self.xdim_box.valueChanged.connect(self.set_xdim)
+        self.ydim_box.valueChanged.connect(self.set_ydim)
+        self.sigma_slider.valueChanged.connect(self.change_sigma)
+        self.intense_slider.valueChanged.connect(self.change_intensity)
+        self.run_btn.clicked.connect(self.run_matrix)
 
     def change_nx(self):
-        self.nx = self.nxbox.value()
+        self.nx = self.nx_box.value()
 
     def change_ny(self):
-        self.ny = self.nybox.value()
+        self.ny = self.ny_box.value()
 
     def change_sigma(self):
-        self.sigma = self.sigmaslider.value()
+        self.sigma = self.sigma_slider.value()
 
     def change_intensity(self):
-        self.intensity = self.intenseslider.value()
+        self.intensity = self.intense_slider.value()
+
+    def set_frames(self):
+        self.frames = self.frames_slider.value()
+
+    def set_xdim(self):
+        self.xdim = self.xdim_box.value()
+
+    def set_ydim(self):
+        self.ydim = self.ydim_box.value()
 
     def run_matrix(self):
-        self.matrix_widget.complex_matrix_out(self.nx,self.ny,self.sigma,self.intensity)
+        self.matrix_widget.complex_matrix_out2(self.xdim, self.ydim, self.nx, self.ny, self.sigma, self.intensity, self.frames)
 
 
 if __name__ == '__main__':

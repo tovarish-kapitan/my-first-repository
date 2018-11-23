@@ -5,10 +5,14 @@ import numpy as np
 import pyqtgraph as pg
 import pyqtgraph.ptime as ptime
 import complex_matrix_generator
+import complex_matrix_generator2
 
 class MatrixWidget(pg.GraphicsLayoutWidget):
 
     def __init__(self, parent=None):
+        self.fr = 50
+        self.xdim = 600
+        self.ydim = 600
         self.frames = None
         self.img = pg.ImageItem()
         self.i = None
@@ -21,10 +25,10 @@ class MatrixWidget(pg.GraphicsLayoutWidget):
         view = self.addViewBox()
         view.setAspectLocked(True)
         view.addItem(self.img)
-        view.setRange(QRectF(0, 0, 600, 600))
+        view.setRange(QRectF(0, 0, self.xdim, self.ydim))
 
-    def updateData(self): 
-        self.set_data(self.frames[:,:,self.i%62])
+    def updateData(self):
+        self.set_data(self.frames[:,:,self.i%(self.fr-1)])
         QTimer.singleShot(1, self.updateData)
         now = ptime.time()
         self.fps = 1 / (now - self.updateTime)
@@ -36,13 +40,25 @@ class MatrixWidget(pg.GraphicsLayoutWidget):
         (self.img).setImage(abs(in_array_data))
 
 
-    def complex_matrix_out(self, nx, ny, sigma, intensity):
-        self.frames = complex_matrix_generator.OurMatrix(600,600,nx,ny,sigma,intensity,63).Data
+    def complex_matrix_out(self, xdim, ydim, nx, ny, sigma, intensity, fr):
+        self.frames = complex_matrix_generator.OurMatrix(xdim,ydim, nx, ny, sigma, intensity, fr).data
+        self.fr = fr
+        self.xdim = xdim
+        self.ydim = ydim
         self.updateTime = ptime.time()
         self.i = 0
         self.fps = 0
         self.updateData()
-        
+
+    def complex_matrix_out2(self, xdim, ydim, nx, ny, sigma, intensity, fr):
+        self.frames = complex_matrix_generator2.OurMatrix2(xdim, ydim,nx,ny, sigma, intensity,fr).data
+        self.fr = fr
+        self.xdim = xdim
+        self.ydim = ydim
+        self.updateTime = ptime.time()
+        self.i = 0
+        self.fps = 0
+        self.updateData()
 
 if __name__ == '__main__':
     import sys
