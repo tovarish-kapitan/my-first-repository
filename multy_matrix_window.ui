@@ -1,0 +1,840 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>matrix_main_window2</class>
+ <widget class="QMainWindow" name="matrix_main_window2">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QSplitter" name="splitter">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>801</width>
+      <height>461</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+    <widget class="QWidget" name="verticalLayoutWidget">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="2" column="2">
+         <widget class="QSpinBox" name="intens2">
+          <property name="maximum">
+           <number>10</number>
+          </property>
+          <property name="value">
+           <number>5</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="sigma1">
+          <property name="minimum">
+           <number>20</number>
+          </property>
+          <property name="maximum">
+           <number>200</number>
+          </property>
+          <property name="singleStep">
+           <number>20</number>
+          </property>
+          <property name="value">
+           <number>20</number>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QSpinBox" name="nx2">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>5</number>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QSpinBox" name="nx1">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>5</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="4">
+         <widget class="QSpinBox" name="intens4">
+          <property name="maximum">
+           <number>10</number>
+          </property>
+          <property name="value">
+           <number>5</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;intens&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;nx&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="QSpinBox" name="ny2">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>5</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QSpinBox" name="v3">
+          <property name="minimum">
+           <number>-5</number>
+          </property>
+          <property name="maximum">
+           <number>5</number>
+          </property>
+          <property name="value">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;sigma&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="3">
+         <widget class="QSpinBox" name="intens3">
+          <property name="maximum">
+           <number>10</number>
+          </property>
+          <property name="value">
+           <number>5</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QSpinBox" name="v1">
+          <property name="minimum">
+           <number>-5</number>
+          </property>
+          <property name="maximum">
+           <number>5</number>
+          </property>
+          <property name="value">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;V&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QSpinBox" name="sigma2">
+          <property name="minimum">
+           <number>20</number>
+          </property>
+          <property name="maximum">
+           <number>200</number>
+          </property>
+          <property name="singleStep">
+           <number>20</number>
+          </property>
+          <property name="value">
+           <number>20</number>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;ny&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="4">
+         <widget class="QSpinBox" name="ny4">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>5</number>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="3">
+         <widget class="QSpinBox" name="ny3">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>5</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QSpinBox" name="intens1">
+          <property name="maximum">
+           <number>10</number>
+          </property>
+          <property name="value">
+           <number>5</number>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QSpinBox" name="ny1">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>5</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QSpinBox" name="sigma3">
+          <property name="minimum">
+           <number>20</number>
+          </property>
+          <property name="maximum">
+           <number>200</number>
+          </property>
+          <property name="singleStep">
+           <number>20</number>
+          </property>
+          <property name="value">
+           <number>20</number>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="4">
+         <widget class="QSpinBox" name="nx4">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>5</number>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="3">
+         <widget class="QSpinBox" name="nx3">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>5</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="4">
+         <widget class="QSpinBox" name="sigma4">
+          <property name="minimum">
+           <number>20</number>
+          </property>
+          <property name="maximum">
+           <number>200</number>
+          </property>
+          <property name="singleStep">
+           <number>20</number>
+          </property>
+          <property name="value">
+           <number>20</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="QSpinBox" name="v4">
+          <property name="minimum">
+           <number>-5</number>
+          </property>
+          <property name="maximum">
+           <number>5</number>
+          </property>
+          <property name="value">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QSpinBox" name="v2">
+          <property name="minimum">
+           <number>-5</number>
+          </property>
+          <property name="maximum">
+           <number>5</number>
+          </property>
+          <property name="value">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="1">
+         <widget class="QSpinBox" name="xdim">
+          <property name="minimum">
+           <number>100</number>
+          </property>
+          <property name="maximum">
+           <number>1000</number>
+          </property>
+          <property name="singleStep">
+           <number>100</number>
+          </property>
+          <property name="value">
+           <number>400</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="ydim">
+          <property name="minimum">
+           <number>100</number>
+          </property>
+          <property name="maximum">
+           <number>1000</number>
+          </property>
+          <property name="singleStep">
+           <number>100</number>
+          </property>
+          <property name="value">
+           <number>400</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;ydim&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;xdim&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_8">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Frames&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QSpinBox" name="frms">
+          <property name="minimum">
+           <number>50</number>
+          </property>
+          <property name="maximum">
+           <number>1000</number>
+          </property>
+          <property name="singleStep">
+           <number>50</number>
+          </property>
+          <property name="value">
+           <number>200</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QPushButton" name="run_bnt">
+        <property name="text">
+         <string>Generate and run</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+    <widget class="MatrixWidget" name="matrix_widget" native="true"/>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MatrixWidget</class>
+   <extends>QWidget</extends>
+   <header>matrix_output_widget.h</header>
+   <container>1</container>
+   <slots>
+    <slot>sigma_slot()</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>v1</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_v1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>154</x>
+     <y>56</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>565</x>
+     <y>29</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>v2</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_v2()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>222</x>
+     <y>58</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>635</x>
+     <y>27</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>v3</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_v3()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>292</x>
+     <y>54</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>701</x>
+     <y>29</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>v4</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_v4()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>364</x>
+     <y>50</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>777</x>
+     <y>31</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sigma4</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_sigma4()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>387</x>
+     <y>88</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>780</x>
+     <y>63</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sigma3</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_sigma3()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>93</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>737</x>
+     <y>69</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sigma2</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_sigma2()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>242</x>
+     <y>89</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>703</x>
+     <y>74</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sigma1</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_sigma1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>173</x>
+     <y>89</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>670</x>
+     <y>81</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>intens1</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_intens1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>130</x>
+     <y>131</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>554</x>
+     <y>106</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>intens2</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_intens2()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>204</x>
+     <y>127</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>571</x>
+     <y>118</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>intens3</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_intens3()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>275</x>
+     <y>131</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>683</x>
+     <y>107</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>intens4</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_intens4()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>346</x>
+     <y>137</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>783</x>
+     <y>110</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nx1</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_nx1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>177</x>
+     <y>172</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>553</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nx2</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_nx2()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>228</x>
+     <y>174</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>635</x>
+     <y>146</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nx3</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_nx3()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>174</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>684</x>
+     <y>159</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nx4</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_nx4()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>375</x>
+     <y>175</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>774</x>
+     <y>147</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ny1</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_ny1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>157</x>
+     <y>213</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>558</x>
+     <y>189</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ny2</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_ny2()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>249</x>
+     <y>219</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>636</x>
+     <y>189</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ny3</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_ny3()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>302</x>
+     <y>220</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>714</x>
+     <y>187</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ny4</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_ny4()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>391</x>
+     <y>220</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>768</x>
+     <y>200</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>xdim</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_xdim()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>395</x>
+     <y>281</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>591</x>
+     <y>270</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ydim</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_ydim()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>385</x>
+     <y>343</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>593</x>
+     <y>336</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>frms</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_frms()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>393</x>
+     <y>400</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>597</x>
+     <y>393</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>run_bnt</sender>
+   <signal>clicked()</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>run_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>363</x>
+     <y>465</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>589</x>
+     <y>454</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>run_button()</slot>
+  <slot>set_frms()</slot>
+  <slot>set_ydim()</slot>
+  <slot>set_xdim()</slot>
+  <slot>set_v1()</slot>
+  <slot>set_v3()</slot>
+  <slot>set_v2()</slot>
+  <slot>set_v4()</slot>
+  <slot>set_sigma1()</slot>
+  <slot>set_sigma2()</slot>
+  <slot>set_sigma3()</slot>
+  <slot>set_sigma4()</slot>
+  <slot>set_intens1()</slot>
+  <slot>set_intens2()</slot>
+  <slot>set_intens3()</slot>
+  <slot>set_intens4()</slot>
+  <slot>set_nx1()</slot>
+  <slot>set_nx2()</slot>
+  <slot>set_nx3()</slot>
+  <slot>set_nx4()</slot>
+  <slot>set_ny2()</slot>
+  <slot>set_ny1()</slot>
+  <slot>set_ny3()</slot>
+  <slot>set_ny4()</slot>
+ </slots>
+</ui>
