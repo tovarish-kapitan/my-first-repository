@@ -25,7 +25,7 @@ class MatrixWidget(pg.GraphicsLayoutWidget):
         n = len(self.pos)
         self.color = []
         for i in range(n):
-            self.color.append([((n-i)/n)**2, (i/n)**0.5, ((n-i)/n)**2, 1])
+            self.color.append([((n-i)/n), (i/n), ((n-i)/n), 1])
         self.colmap = pg.ColorMap(self.pos, self.color)
         self.lut = self.colmap.getLookupTable(0, 1.0, 256)
         super().__init__(parent)
@@ -40,7 +40,7 @@ class MatrixWidget(pg.GraphicsLayoutWidget):
         view.setRange(QRectF(0, 0, self.xdim, self.ydim))
 
     def updateData(self):
-        self.set_data(self.data[:,:,self.i%(self.frames-1)] / 10)
+        self.set_data(self.data[:,:,self.i%(self.frames-1)])
         QTimer.singleShot(1, self.updateData)
         now = ptime.time()
         self.fps = 1 / (now - self.updateTime)
@@ -50,7 +50,8 @@ class MatrixWidget(pg.GraphicsLayoutWidget):
 
     def set_data(self, in_array_data):
         ab = abs(in_array_data)
-        ab = ndimage.maximum_filter(ab, size=30)
+        #ab = ab.astype(int)
+        #ab = ndimage.maximum_filter(ab, size=30)
         (self.item).setImage(ab)
 
 
