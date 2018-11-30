@@ -16,9 +16,10 @@ class MatrixWidget(pg.GraphicsLayoutWidget):
         self.xdim = 600
         self.ydim = 600
         self.data = None
-        #self.img = None
+        #self.text = pg.TextItem(anchor=(0, -1.0))
         self.item = pg.ImageItem()
         self.i = None
+        self.cm = pg.GraphItem()
         self.fps = None
         self.updateTime = None
         self.pos = np.linspace(0, 1, 256)
@@ -35,6 +36,8 @@ class MatrixWidget(pg.GraphicsLayoutWidget):
         view = self.addViewBox()
         view.setAspectLocked(True)
         view.addItem(self.item)
+        view.addItem(self.cm)
+        #(self.text).setParentItem(self.cm)
         self.item.setLookupTable(self.lut)
         self.item.setLevels([0, 1])
         view.setRange(QRectF(0, 0, self.xdim, self.ydim))
@@ -49,11 +52,22 @@ class MatrixWidget(pg.GraphicsLayoutWidget):
         self.i = self.i + 1
 
     def set_data(self, in_array_data):
-        ab = abs(in_array_data)
-        #ab = ab.astype(int)
+        frame = abs(in_array_data)
+        frame = frame.astype(int)
+        (self.item).setImage(frame)
         #ab = ndimage.maximum_filter(ab, size=30)
-        (self.item).setImage(ab)
+        frame = ndimage.binary_opening(frame, structure=np.ones((2, 2))).astype(int)
+        labels, num = ndimage.label(frame)
+        (xcm, ycm) = ndimage.measurements.center_of_mass(frame, labels)
+        slices =  ndimage.find_objects(frame)
+        (self.cm).setData(pos=[[xcm, ycm]], symbol=['s'], size=self.val_from_slice(slices[0]), pxMode=False)
+        #(self.text).setText('target')
 
+    def val_from_slice(self, tup):
+        return (self.slice_bouds(tup[0]) + self.slice_bouds(tup[1])) / 2
+
+    def slice_bouds(self, slice_):
+        return slice_.stop - slice_.start
 
     #def complex_matrix_out(self, xdim, ydim, nx, ny, sigma, intensity, frames):
         #self.frames = complex_matrix_generator.OurMatrix(xdim,ydim, nx, ny, sigma, intensity, frames).data
@@ -67,7 +81,7 @@ class MatrixWidget(pg.GraphicsLayoutWidget):
 
     def complex_matrix_out2(self, xdim, ydim, vel, nx, ny, sigma, intensity, frames):
         #self.frames = complex_matrix_generator2.OurMatrix2(xdim, ydim, vel, nx,ny, sigma, intensity,fr).data
-        npzfile = self.crap(xdim, ydim, vel, nx, ny, sigma, intensity, frames)
+        npzfile = self.np_ziping(xdim, ydim, vel, nx, ny, sigma, intensity, frames)
         self.data = npzfile['arr_0']
         self.frames = frames
         self.xdim = xdim
@@ -85,7 +99,7 @@ class MatrixWidget(pg.GraphicsLayoutWidget):
             name = name + str(infa[i]) + '_'
         return name
 
-    def crap(self, xdim, ydim, vel, nx, ny, sigma, intensity, frames):
+    def np_ziping(self, xdim, ydim, vel, nx, ny, sigma, intensity, frames):
         pathlib.Path('matrix_saves').mkdir(parents=True, exist_ok=True)
         name = self.generate_name(xdim, ydim, vel, nx, ny, sigma, intensity, frames)
         try:

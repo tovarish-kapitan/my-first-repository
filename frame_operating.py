@@ -12,7 +12,14 @@ def little_research(frames):
         shit.append(sm)
     print('массы лейблов\n',shit)
     fo = ndimage.find_objects(frame)
+    print(val_from_slice(fo[0]))
     print('найденные объекты\n',fo,'\n')
+
+def val_from_slice(tup):
+    return (slice_bouds(tup[0]) + slice_bouds(tup[1]))/2
+
+def slice_bouds(slice_):
+    return slice_.stop - slice_.start
 
 with open("matrix_saves/400_400_200_1_1_1_1_1_1_1_1_1_1_1_1_20_20_20_20_10_0_0_0_", 'br') as f:
     npzfile = np.load(f)
