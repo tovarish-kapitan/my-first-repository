@@ -13,6 +13,7 @@ class MatrixMainWindow(QtWidgets.QMainWindow, multy_matrix_window.Ui_matrix_main
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
+        self.noize_ = 1
         self.x_dim = 400
         self.y_dim = 400
         self.frames = 200
@@ -91,8 +92,21 @@ class MatrixMainWindow(QtWidgets.QMainWindow, multy_matrix_window.Ui_matrix_main
     def set_ydim(self):
         self.y_dim = self.ydim.value()
 
+    def set_noize(self):
+        self.noize_ = self.noize.value()
+
     def run_button(self):
-        self.matrix_widget.complex_matrix_out2(self.x_dim, self.y_dim, self.vel, self.nx, self.ny, self.sigma, self.intensity, self.frames)
+        self.matrix_widget.play = True
+        self.matrix_widget.complex_matrix_out2(self.x_dim, self.y_dim, self.vel, self.nx, self.ny, self.sigma, self.intensity, self.frames, self.noize_)
+
+    def pause(self):
+        self.matrix_widget.play = not self.matrix_widget.play
+
+    def next(self):
+        self.matrix_widget.i += 1
+
+    def prev(self):
+        self.matrix_widget.i -= 1
 
 
 if __name__ == '__main__':

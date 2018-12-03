@@ -374,6 +374,23 @@
           </property>
          </widget>
         </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label10">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Noize level&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QSpinBox" name="noize">
+          <property name="maximum">
+           <number>10</number>
+          </property>
+          <property name="value">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item>
@@ -382,6 +399,31 @@
          <string>Generate and run</string>
         </property>
        </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QPushButton" name="pushButton">
+          <property name="text">
+           <string>Prev. frame</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pause_btn">
+          <property name="text">
+           <string>Pause/Play</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_2">
+          <property name="text">
+           <string>Next frame</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
        <spacer name="horizontalSpacer">
@@ -407,7 +449,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>
@@ -433,8 +475,8 @@
    <slot>set_v1()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>154</x>
-     <y>56</y>
+     <x>242</x>
+     <y>55</y>
     </hint>
     <hint type="destinationlabel">
      <x>565</x>
@@ -449,8 +491,8 @@
    <slot>set_v2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>222</x>
-     <y>58</y>
+     <x>360</x>
+     <y>55</y>
     </hint>
     <hint type="destinationlabel">
      <x>635</x>
@@ -465,8 +507,8 @@
    <slot>set_v3()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>292</x>
-     <y>54</y>
+     <x>479</x>
+     <y>55</y>
     </hint>
     <hint type="destinationlabel">
      <x>701</x>
@@ -481,8 +523,8 @@
    <slot>set_v4()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>364</x>
-     <y>50</y>
+     <x>597</x>
+     <y>55</y>
     </hint>
     <hint type="destinationlabel">
      <x>777</x>
@@ -497,8 +539,8 @@
    <slot>set_sigma4()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>387</x>
-     <y>88</y>
+     <x>597</x>
+     <y>85</y>
     </hint>
     <hint type="destinationlabel">
      <x>780</x>
@@ -513,8 +555,8 @@
    <slot>set_sigma3()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>93</y>
+     <x>479</x>
+     <y>85</y>
     </hint>
     <hint type="destinationlabel">
      <x>737</x>
@@ -529,8 +571,8 @@
    <slot>set_sigma2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>242</x>
-     <y>89</y>
+     <x>360</x>
+     <y>85</y>
     </hint>
     <hint type="destinationlabel">
      <x>703</x>
@@ -545,8 +587,8 @@
    <slot>set_sigma1()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>173</x>
-     <y>89</y>
+     <x>242</x>
+     <y>85</y>
     </hint>
     <hint type="destinationlabel">
      <x>670</x>
@@ -561,8 +603,8 @@
    <slot>set_intens1()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>130</x>
-     <y>131</y>
+     <x>242</x>
+     <y>115</y>
     </hint>
     <hint type="destinationlabel">
      <x>554</x>
@@ -577,8 +619,8 @@
    <slot>set_intens2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>204</x>
-     <y>127</y>
+     <x>360</x>
+     <y>115</y>
     </hint>
     <hint type="destinationlabel">
      <x>571</x>
@@ -593,8 +635,8 @@
    <slot>set_intens3()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>275</x>
-     <y>131</y>
+     <x>479</x>
+     <y>115</y>
     </hint>
     <hint type="destinationlabel">
      <x>683</x>
@@ -609,8 +651,8 @@
    <slot>set_intens4()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>346</x>
-     <y>137</y>
+     <x>597</x>
+     <y>115</y>
     </hint>
     <hint type="destinationlabel">
      <x>783</x>
@@ -625,8 +667,8 @@
    <slot>set_nx1()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>177</x>
-     <y>172</y>
+     <x>242</x>
+     <y>145</y>
     </hint>
     <hint type="destinationlabel">
      <x>553</x>
@@ -641,8 +683,8 @@
    <slot>set_nx2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>228</x>
-     <y>174</y>
+     <x>360</x>
+     <y>145</y>
     </hint>
     <hint type="destinationlabel">
      <x>635</x>
@@ -657,8 +699,8 @@
    <slot>set_nx3()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>300</x>
-     <y>174</y>
+     <x>479</x>
+     <y>145</y>
     </hint>
     <hint type="destinationlabel">
      <x>684</x>
@@ -673,8 +715,8 @@
    <slot>set_nx4()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>375</x>
-     <y>175</y>
+     <x>597</x>
+     <y>145</y>
     </hint>
     <hint type="destinationlabel">
      <x>774</x>
@@ -689,8 +731,8 @@
    <slot>set_ny1()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>157</x>
-     <y>213</y>
+     <x>242</x>
+     <y>175</y>
     </hint>
     <hint type="destinationlabel">
      <x>558</x>
@@ -705,8 +747,8 @@
    <slot>set_ny2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>249</x>
-     <y>219</y>
+     <x>360</x>
+     <y>175</y>
     </hint>
     <hint type="destinationlabel">
      <x>636</x>
@@ -721,8 +763,8 @@
    <slot>set_ny3()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>302</x>
-     <y>220</y>
+     <x>479</x>
+     <y>175</y>
     </hint>
     <hint type="destinationlabel">
      <x>714</x>
@@ -737,8 +779,8 @@
    <slot>set_ny4()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>391</x>
-     <y>220</y>
+     <x>597</x>
+     <y>175</y>
     </hint>
     <hint type="destinationlabel">
      <x>768</x>
@@ -753,8 +795,8 @@
    <slot>set_xdim()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>395</x>
-     <y>281</y>
+     <x>597</x>
+     <y>207</y>
     </hint>
     <hint type="destinationlabel">
      <x>591</x>
@@ -769,8 +811,8 @@
    <slot>set_ydim()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>385</x>
-     <y>343</y>
+     <x>597</x>
+     <y>237</y>
     </hint>
     <hint type="destinationlabel">
      <x>593</x>
@@ -785,8 +827,8 @@
    <slot>set_frms()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>393</x>
-     <y>400</y>
+     <x>597</x>
+     <y>267</y>
     </hint>
     <hint type="destinationlabel">
      <x>597</x>
@@ -801,12 +843,76 @@
    <slot>run_button()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>363</x>
-     <y>465</y>
+     <x>364</x>
+     <y>327</y>
     </hint>
     <hint type="destinationlabel">
      <x>589</x>
      <y>454</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pause_btn</sender>
+   <signal>clicked()</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>pause()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>286</x>
+     <y>374</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>589</x>
+     <y>498</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>next()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>463</x>
+     <y>372</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>554</x>
+     <y>506</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>prev()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>112</x>
+     <y>374</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>504</x>
+     <y>515</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>noize</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>matrix_main_window2</receiver>
+   <slot>set_noize()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>493</x>
+     <y>289</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>673</x>
+     <y>500</y>
     </hint>
    </hints>
   </connection>
@@ -836,5 +942,9 @@
   <slot>set_ny1()</slot>
   <slot>set_ny3()</slot>
   <slot>set_ny4()</slot>
+  <slot>pause()</slot>
+  <slot>next()</slot>
+  <slot>prev()</slot>
+  <slot>set_noize()</slot>
  </slots>
 </ui>

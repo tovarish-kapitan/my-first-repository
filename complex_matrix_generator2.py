@@ -3,7 +3,7 @@ import math
 
 
 class OurMatrix2:
-    def __init__(self, xdim, ydim, vel, nx, ny, sigma, intensity, frames):
+    def __init__(self, xdim, ydim, vel, nx, ny, sigma, intensity, frames, noize):
 
         self.data = np.ndarray(shape=(xdim, ydim, frames,), dtype=complex)  # массив комплексных матриц
         dt = 2 * np.pi / frames
@@ -20,12 +20,11 @@ class OurMatrix2:
                 y_max[j] = ydim * (1 + 2 * (j // 2)) // 4 + math.ceil(ydim // 5 * np.cos(dt * ny[j] * vel[j] * t))  # фигуры Лиссажу
 
                 impletion = np.ndarray(shape=(xdim, ydim), dtype=complex)  # формируем заполнение
-                impletion[:, :].real = (2 * np.random.rand(xdim, ydim) - 1) / (2 ** 0.5)
-                impletion[:, :].imag = (2 * np.random.rand(xdim, ydim) - 1) / (2 ** 0.5)
+                impletion[:, :].real = 1#(2 * np.random.rand(xdim, ydim) - 1) / (2 ** 0.5)
+                impletion[:, :].imag = 1#(2 * np.random.rand(xdim, ydim) - 1) / (2 ** 0.5)
 
                 for n in range(xdim):
-                    impletion[n,:] = (np.exp(- ((n - x_max[j]) ** 2) / sigma[j])) * impletion[n,
-                                                                              :]  # модулируем заполнение по столбцам,
+                    impletion[n,:] = (np.exp(- ((n - x_max[j]) ** 2) / sigma[j])) * impletion[n,:]  # модулируем заполнение по столбцам,
                 for k in range(ydim):
                     impletion[:, k] = intensity[j] * (np.exp(-((k - y_max[j]) ** 2) / sigma[j])) * impletion[:, k]  # а затем результат модулируем по строкам
 
@@ -34,7 +33,7 @@ class OurMatrix2:
             impletion = np.ndarray(shape=(xdim, ydim), dtype=complex)  # формируем заполнение
             impletion[:, :].real = (2 * np.random.rand(xdim, ydim) - 1) / (2 ** 0.5)
             impletion[:, :].imag = (2 * np.random.rand(xdim, ydim) - 1) / (2 ** 0.5)
-            self.data[:, :, t] = self.data[:, :, t] + impletion
+            self.data[:, :, t] = self.data[:, :, t] + noize * impletion
             print(t, "st frame generated")
 
 
