@@ -13,16 +13,19 @@ import numpy as np
 class CustomGraph(pg.GraphItem):
     def __init__(self):
         self.textItems = []
+        self.ind = 0
         pg.GraphItem.__init__(self)
 
     def setData(self, **kwds):
         self.text = kwds.pop('text', [])
+        self.sizes = kwds.get('size')
         self.dat = kwds
         if 'pos' in self.dat:
             npts = self.dat['pos'].shape[0]
             self.dat['dat'] = np.empty(npts, dtype=[('index', int)])
             self.dat['dat']['index'] = np.arange(npts)
         self.setTexts(self.text)
+        self.ind = self.ind + 1
         self.updateGraph()
 
     def setTexts(self, text):
@@ -37,7 +40,7 @@ class CustomGraph(pg.GraphItem):
     def updateGraph(self):
         pg.GraphItem.setData(self, **self.dat)
         for i, item in enumerate(self.textItems):
-            item.setPos(*self.dat['pos'][i])
+            item.setPos(*self.dat['pos'][i] + (0,-0.5*self.sizes[i]))
 
 
 
@@ -77,6 +80,7 @@ if __name__ == '__main__':
 
     ## Define the symbol to use for each node (this is optional)
     symbols = ['o', 'o', 'o', 'o', 't', '+']
+    sizes = [1, 2, 3, 4, 1, 1]
 
     ## Define the line style for each connection (this is optional)
     lines = np.array([
@@ -92,7 +96,8 @@ if __name__ == '__main__':
     texts = ["Point %d" % i for i in range(6)]
 
     ## Update the graph
-    g.setData(pos=pos, adj=adj, pen=lines, size=1, symbol=symbols, pxMode=False, text=texts)
+    g.setData(pos=pos, adj=adj, pen=lines, size=sizes, symbol=symbols, pxMode=False, text=texts)
+
 
     if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
         QtGui.QApplication.instance().exec_()
