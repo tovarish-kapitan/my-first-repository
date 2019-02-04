@@ -24,12 +24,14 @@ class MatrixWidget(pg.GraphicsLayoutWidget):
         self.ydim = 0
         self.noize = 0
         self.data = None
-        self.texts = custom_graph.CustomGraph()
+        #self.texts = custom_graph.CustomGraph()
         self.item = pg.ImageItem()
         self.i = None
         self.mass_centers = pg.GraphItem()
         self.fps = None
         self.updateTime = None
+        self.view = None
+        self.item_number = None
         colormap = cm.get_cmap("plasma")
         colormap._init()
         self.lut = (colormap._lut * 255).view(np.ndarray)
@@ -39,23 +41,29 @@ class MatrixWidget(pg.GraphicsLayoutWidget):
 
     def initUI(self):
 
-        view = self.addViewBox(0, 1)
-        view.setAspectLocked(True)
-        view.addItem(self.item)
-        xAxis = pg.AxisItem(orientation='bottom', linkView=view)
+        self.view = self.addViewBox(0, 1)
+        self.view.setAspectLocked(True)
+        self.view.addItem(self.item)
+        self.view.addItem(self.mass_centers)
+        xAxis = pg.AxisItem(orientation='bottom', linkView=self.view)
         xAxis.setLabel('V, m/s', color='#2E2EFE')
         self.addItem(xAxis, 1, 1)
-        yAxis = pg.AxisItem(orientation='left', linkView=view)
+        yAxis = pg.AxisItem(orientation='left', linkView=self.view)
         yAxis.setLabel('R, m', color='#2E2EFE')
         self.addItem(yAxis, 0,0)
-        view.addItem(self.texts)
+        #self.view.addItem(self.texts)
         self.item.setLookupTable(self.lut)
-        view.setRange(QRectF(self.Vmin, self.Rmin, self.VRange , self.RRange))
-
+        #self.view.addItem(QtGui.QGraphicsRectItem(QRectF(0, 0, 10, 10)))
+        self.view.setRange(QRectF(self.Vmin, self.Rmin, self.VRange , self.RRange))
+        self.item_number = len(self.view.allChildren())
 
     def set_data(self, in_array_data):
+        items = self.view.allChildren()
+        for i in range(len(items)):
+            if i >= self.item_number - 1:
+                self.view.removeItem(items[i])
         frame = abs(in_array_data)
-        self.item.setImage(frame)
+        self.item.setImage(frame, autoLevels=True)
         self.item.setRect(QRectF(self.Vmin, self.Rmin, self.VRange , self.RRange))
         frame = (abs(in_array_data) - 2*self.noize) * np.heaviside((abs(in_array_data) - 2*self.noize),0)
         #frame = frame.astype(int)
@@ -64,19 +72,28 @@ class MatrixWidget(pg.GraphicsLayoutWidget):
         pos = []
         symbols = []
         sizes = []
+        rects = []
         texts = []
         for i in range(lab_num):
             (xcm, ycm) = (ndimage.measurements.center_of_mass(labeled_array == i + 1))
             xcm = xcm * (self.VRange / self.xdim) + self.Vmin
             ycm = ycm * (self.RRange / self.ydim) + self.Rmin
-            slices =  ndimage.find_objects(labeled_array == i + 1)
+            slices = ndimage.find_objects(labeled_array == i + 1)
             pos.append([xcm, ycm])
-            symbols.append('s')
-            sizes.append(self.val_from_slice(slices[0]))
-            texts.append('target %s\n V=%3d R=%3d' % (i, xcm, ycm))
+            rect = self.rect_from_tuple(slices[0])
+            rect = QtGui.QGraphicsRectItem(rect)
+            rect.setPen(pg.mkPen(100, 200, 100))
+            self.view.addItem(rect)
+            text = 'target %s\n V=%3d R=%3d' % (i, xcm, ycm)
+            text = pg.TextItem(text)
+            self.view.addItem(text)
+            text.setPos(xcm, slices[0][1].start * (self.RRange / self.ydim))
+            #symbols.append('s')
+            #sizes.append(self.val_from_slice(slices[0]))
+            #texts.append('target %s\n V=%3d R=%3d' % (i, xcm, ycm))
         pos = np.asarray(pos)
-        self.mass_centers.setData(pos=pos, symbolPen=(255,0,0,255), symbolBrush=(255,0,0,255), size=10, symbol='+')
-        self.texts.setData(pos=pos, symbolPen='g', symbolBrush=None, size=sizes, symbol=symbols, text=texts, pxMode=False)
+        self.mass_centers.setData(pos=pos, symbolPen=(255,0,0,255), symbolBrush=(255,0,0,255), size=20, symbol='x')
+        #self.texts.setData(pos=pos, symbolPen='g', symbolBrush=None, size=sizes, symbol=None, text=texts, pxMode=False)
 
 
     def set_param(self, xdim, ydim, noize):
@@ -86,12 +103,20 @@ class MatrixWidget(pg.GraphicsLayoutWidget):
 
 
     def val_from_slice(self, tup):
-        return (self.slice_bouds(tup[0]) * (self.VRange / self.xdim) +
-                self.slice_bouds(tup[1]) * (self.RRange / self.ydim)) / 2
+       return (self.slice_bouds(tup[0]) * (self.VRange / self.xdim) +
+               self.slice_bouds(tup[1]) * (self.RRange / self.ydim)) / 2
 
 
     def slice_bouds(self, slice_):
         return slice_.stop - slice_.start
+
+
+    def rect_from_tuple(self, tup):
+        x0 = tup[0].start * (self.VRange / self.xdim) + self.Vmin
+        dx = self.slice_bouds(tup[0]) * (self.VRange / self.xdim)
+        y0 = tup[1].start * (self.RRange / self.ydim) + self.Rmin
+        dy = self.slice_bouds(tup[1]) * (self.RRange / self.ydim)
+        return QRectF(x0, y0, dx, dy)
 
 
 if __name__ == '__main__':
