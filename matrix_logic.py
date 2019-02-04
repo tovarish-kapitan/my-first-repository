@@ -46,7 +46,7 @@ class MatrixLogic:
         self.i = 0
         self.fps = 0
         self.noize = noize
-        self.wid.set_param(self.xdim, self.ydim, self.noize)
+        self.wid.set_param(self.xdim, self.ydim, self.noize )
         self.updateData()
 
 
