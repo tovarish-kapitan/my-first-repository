@@ -7,7 +7,7 @@ import misc
 
 class RainPolygon:
 
-    def __init__(self, area_id, area_name, max_hight, polygon):
+    def __init__(self, polygon, max_hight, area_id = 1, area_name = 'default_name'):
         self.area_id = area_id
         self.area_name = area_name
         self.max_hight = max_hight
@@ -38,30 +38,26 @@ class RainAreas:
         self.polygon_list = []
         self.tct = misc.TopoCoordTransformer(0, 0, 0)  #для визуализации
 
+
+    def add_polygon_directly(self,polygon, h, name='default_name'):
+        area_id = len(self.polygon_list) + 1
+        area_name = name
+        self.polygon_list.append(RainPolygon(polygon, h, area_id, area_name))
+
+
+    def add_polygon(self, rain_polygon):
+        self.polygon_list.append(rain_polygon)
+
+
     def add_squere_polygon(self, lon1, lat1, a, h, name):
     #  добавляет квадратный полигон
         area_id = len(self.polygon_list) + 1
         area_name = name
         polygon = [(lon1 + a, lat1 + a), (lon1 + a, lat1 - a), (lon1 - a, lat1 - a), (lon1 - a, lat1 + a), (lon1 + a, lat1 + a)]
-        self.polygon_list.append(RainPolygon(area_id, area_name, h, polygon))
+        self.polygon_list.append(RainPolygon(polygon, h, area_id, area_name))
 
 
-    #def chess_polygons_init(self, n, l, h):
-    #   k = 1
-    #    for i in range(-n, n, 1):
-    #        for j in range(-n, n, 1):
-    #            #if (i + j) // 2 == 0:
-    #                lon1 = self.lon0 + i * l
-    #                lat1 = self.lat0 + j * l
-    #                polygon = [(lon1, lat1), (lon1 + l, lat1), (lon1 + l, lat1 + l), (lon1, lat1 + 1)]
-    #                area_id = k
-    #                k = k + 1
-    #                area_name = '%s_%s' % (i, j)
-    #                self.polygon_list.append(RainPolygon(area_id, area_name, h, polygon))
-    #    #print(k, 'poligons')
-
-
-    def ray_polyline_projection(self, max_dist, eps, az):
+    def ray_polyline_projection(self, max_dist, eps, az, refr=True):
     #  возвращает полилинию проекции луча на поверхность, и ray для визуализации луча
         polyline = []
         ray = []
@@ -69,10 +65,10 @@ class RainAreas:
         n = (max_dist // 10) + 1
         for i in range(n + 1):
             dist = i * max_dist / n
-            l = geopoints.l(dist, eps)
+            l = geopoints.l(dist, eps, refr)
             (lon, lat) = geopoints.lon_lat_new_point(self.lon0, self.lat0, az, l)
             polyline.append((lon, lat))
-            h = geopoints.h1(dist, eps) * 1000
+            h = (geopoints.h1(dist, eps, refr) + self.h0) * 1000
             ray.append((lon, lat, h))
         return polyline, ray
 
@@ -80,7 +76,7 @@ class RainAreas:
     def intersection_list(self, polyline):
     #  возвращает пересечание полилинии проекции и полигонов, это тоже полилинии
         intersections = []
-        empty = 0
+        #empty = 0
         for polygon in self.polygon_list:
             shapely_poly = Polygon(polygon.polygon)
             shapely_line = LineString(polyline)
@@ -88,47 +84,60 @@ class RainAreas:
                 intersection_line = list(shapely_poly.intersection(shapely_line).coords)
                 if len(intersection_line) > 1:
                     intersections.append((polygon.area_id, polygon.area_name, intersection_line))
+                else: intersections.append(None)
             except NotImplementedError:
                 #print("Исключение(вызывается, если полигон не пересекся с проекцией луча)")
-                empty = empty + 1
+                intersections.append(None)
         #print('empty', empty)
         return intersections
 
-    def hight_filtration(self, intersections, eps, az):
+    def hight_filtration(self, intersections, eps, az, refr=True):
     #  для каждого пересечения возвращает 2 3d точки, "настоящие" точки прересечения луча с полигонами.
     #  для этого выясняется, в какой точке луч достигает max_hight соответствующего полигона, и если она лежит внутри
     #  то она и будет новой точкой выхода луча из полигона
         true_ints = []
         eps = np.pi * eps / 180
         for intersection in intersections:
-            id, name, line = intersection[0], intersection[1], intersection[2]
-            h = self.polygon_list[id - 1].max_hight
-            h1 = h - self.h0
-            dist = geopoints.d_from_h1(h1, eps)
-            l = geopoints.l(dist, eps)
-            point1 = line[0]
-            point2 = line[-1]
-            if geopoints.l_from_points((self.lon0, self.lat0), point1) < l:
-                if geopoints.l_from_points((self.lon0, self.lat0), point2) >= l:
-                    point2 = geopoints.lon_lat_new_point(self.lon0, self.lat0, az, l)
-                l1 = geopoints.l_from_points((self.lon0, self.lat0), point1)
-                l2 = geopoints.l_from_points((self.lon0, self.lat0), point2)
-                hp1 = geopoints.h1_from_l(l1, eps) + self.h0
-                hp2 = geopoints.h1_from_l(l2, eps) + self.h0
-                d1 = geopoints.d_from_h1(hp1, eps)
-                d2 = geopoints.d_from_h1(hp2, eps)
-                lon1, lat1 = point1
-                lon2, lat2 = point2
-                point1_3d = (lon1, lat1, hp1)
-                point2_3d = (lon2, lat2, hp2)
-                true_ints.append((id, name, (point1_3d, point2_3d),(d1, d2)))
+            if intersection == None:
+                true_ints.append(None)
+            else:
+                id, name, line = intersection[0], intersection[1], intersection[2]
+                h = self.polygon_list[id - 1].max_hight
+                h1 = h - self.h0
+                if h1 <= 0:
+                    true_ints.append(None)
+                else:
+                    dist = geopoints.d_from_h1(h1, eps, refr)
+                    l = geopoints.l(dist, eps, refr)
+                    point1 = line[0]
+                    point2 = line[-1]
+                    flag = False
+                    if geopoints.l_from_points((self.lon0, self.lat0), point1) < l:
+                        if geopoints.l_from_points((self.lon0, self.lat0), point2) >= l:
+                            point2 = geopoints.lon_lat_new_point(self.lon0, self.lat0, az, l)
+                            flag = True
+                        l1 = geopoints.l_from_points((self.lon0, self.lat0), point1)
+                        l2 = geopoints.l_from_points((self.lon0, self.lat0), point2)
+                        hp1 = geopoints.h1_from_l(l1, eps, refr) + self.h0
+                        if flag == True:
+                            hp2 = h
+                        else:
+                            hp2 = geopoints.h1_from_l(l2, eps, refr) + self.h0
+                        d1 = geopoints.d_from_h1(hp1 - self.h0, eps, refr)
+                        d2 = geopoints.d_from_h1(hp2 - self.h0, eps, refr)
+                        lon1, lat1 = point1
+                        lon2, lat2 = point2
+                        point1_3d = (lon1, lat1, hp1)
+                        point2_3d = (lon2, lat2, hp2)
+                        true_ints.append((id, name, (point1_3d, point2_3d),(d1, d2)))
+                    else: true_ints.append(None)
         return true_ints
 
 
-    def complete_procedure(self, max_dist, eps, az):
-        polyline, ray = self.ray_polyline_projection(max_dist, eps, az)
+    def complete_procedure(self, max_dist, eps, az, refr=True):
+        polyline, ray = self.ray_polyline_projection(max_dist, eps, az, refr)
         intersections = self.intersection_list(polyline)
-        true_ints = self.hight_filtration(intersections, eps, az)
+        true_ints = self.hight_filtration(intersections, eps, az, refr)
         return true_ints
 
 
@@ -188,10 +197,6 @@ class RainAreas:
                             if r >= r1 and r <= r2:
                                 arr[i][j][k] = id
         return arr
-
-
-
-
 
 
     def show_earth_serface_part(self, min_lon, max_lon, min_lat, max_lat):
@@ -288,17 +293,18 @@ class RainAreas:
         ys = []
         zs = []
         for intersection in true_ints:
-            id, name, (point1, point2) = intersection
-            lon1, lat1, h1 = point1
-            lon2, lat2, h2 = point2
-            x, y, z = self.tct.lonlatalt_to_xyz_geocent(lon1, lat1, 1000*h1)
-            xs.append(x)
-            ys.append(y)
-            zs.append(z)
-            x, y, z = self.tct.lonlatalt_to_xyz_geocent(lon2, lat2, 1000 * h2)
-            xs.append(x)
-            ys.append(y)
-            zs.append(z)
+            if intersection != None:
+                id, name, (point1, point2), (d1, d2) = intersection
+                lon1, lat1, h1 = point1
+                lon2, lat2, h2 = point2
+                x, y, z = self.tct.lonlatalt_to_xyz_geocent(lon1, lat1, 1000 * h1)
+                xs.append(x)
+                ys.append(y)
+                zs.append(z)
+                x, y, z = self.tct.lonlatalt_to_xyz_geocent(lon2, lat2, 1000 * h2)
+                xs.append(x)
+                ys.append(y)
+                zs.append(z)
         return points3d(xs, ys, zs,colormap="copper", scale_factor=1000)
 
 
@@ -334,21 +340,21 @@ class RainAreas:
 
 if __name__ == '__main__':
 
-    areas = RainAreas(0, 0, 0)
-    areas.add_squere_polygon(1, 1, 0.6, 10, '1')
-    areas.add_squere_polygon(0, 0, 0.3, 5, '2')
+    areas = RainAreas(0, 0, 5)
+    areas.add_squere_polygon(0.2, 0.2, 0.1, 5, '1')
+    areas.add_squere_polygon(0, 0, 0.2, 10, '2')
     #ints_angle_grid = areas.ints_angle_grid()
     #arr = areas.new_grid_procedure(ints_angle_grid)
-    #polyline, ray = areas.ray_polyline_projection(1000, 10, 5, 135)
-    #true_ints = areas.complete_procedure(1000, 10, 5, 270)
+    polyline, ray = areas.ray_polyline_projection(1000, 0, 45, refr=False)
+    true_ints = areas.complete_procedure(1000, 0, 45, refr=False)
     #true_ints = areas.ints_angle_grid()
-    #print(true_ints)
+    print(true_ints)
     areas.show_earth_serface_part(-10,10,-10,10)
     #areas.new_show_polygon(0)
     areas.show_all_polygons()
     #areas.show_grid(arr)
-    #areas.show_traj_proj(polyline)
-    #areas.show_ray(ray)
-    #areas.show_intersect_points(true_ints)
+    areas.show_traj_proj(polyline)
+    areas.show_ray(ray)
+    areas.show_intersect_points(true_ints)
     show()
     #print(arr[0][0])
